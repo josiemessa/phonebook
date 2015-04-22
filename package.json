@@ -1,0 +1,17 @@
+{
+	"name": "phonebook",
+	"version": "0.0.1",
+	"description": "Phonebook Exercise",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/josiemessa/phonebook"
+	},
+	"dependencies": {
+		"express": "4.12.x",
+		"mocha": "2.2.x",
+		"chai": "*",
+		"request": "*",
+		"should": "*",
+		"supertest": "*"
+	}
+}
