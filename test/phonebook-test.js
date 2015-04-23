@@ -13,12 +13,35 @@ describe('Acceptance Criteria:', function(){
 						throw err;
 					}
 					res.status.should.equal(200);
-					res.body.should.be.instanceof(Array).and.have.lengthOf(3);
+					res.body.should.have.lengthOf(3);
           res.body.should.containDeep([{"Surname":"Messa", "Surname": "Lablaw", "Surname": "Bateman"}])
 					done();
 			})
 		});
-    it('should create a new entry to the phone book');
+    it('should create a new entry to the phone book', function(done){
+      var body = {
+        "Surname":"Person",
+        "Firstname":"New",
+        "Phone":"98765432",
+        "Address":{
+          "House": "The House",
+          "Street": "The Street",
+          "Postcode": "AB12 3CD"
+        }
+      }
+      request(url)
+        .post('/')
+        .send(body)
+        .expect(200)
+        .end(function(err, res){
+          if(err){
+            throw err;
+          }
+          done();
+
+        })
+    });
+
     it('should remove an existing entry in the phone book.');
     it('should update an existing entry in the phone book');
     it('should search for entries in the phone book by surname.');

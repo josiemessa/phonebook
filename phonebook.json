@@ -1,4 +1,5 @@
-[
+{
+	"001": 
 	{
 		"Surname": "Messa",
 		"Firstname": "Josie",
@@ -12,11 +13,13 @@
 			"Postcode": "SO21 2JN"
 		}
 	},
+	"002":
 	{
 		"Surname": "Lablaw",
 		"Firstname": "Bob",
 		"Phone": 12345678
 	},
+	"003":
 	{
 		"Surname": "Bateman",
 		"Firstname": "Ralph",
@@ -31,4 +34,4 @@
 			"Postcode": "PO51 6OD"
 		}
 	}
-]
+}

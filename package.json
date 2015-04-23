@@ -9,9 +9,9 @@
 	"dependencies": {
 		"express": "4.12.x",
 		"mocha": "2.2.x",
-		"chai": "*",
 		"request": "*",
 		"should": "*",
-		"supertest": "*"
+    "supertest": "*",
+    "body-parser": "*"
 	}
 }
