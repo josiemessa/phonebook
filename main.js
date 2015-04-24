@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var fs         = require('fs');
 
 var phonebookFile = 'phonebook.json';
+var allowedEntries = ["Surname", "Firstname", "Phone", "Address"];
+
 // Keep this synchronous as we'll be useless without the data loaded
 var phonebook = JSON.parse(fs.readFileSync(phonebookFile, 'utf8'));
 var app = express();
@@ -13,8 +15,6 @@ app.get('/phonebook', function(req, res) {
 });
 
 app.post('/phonebook', function(req, res){
-  var allowedEntries = ["Surname", "Firstname", "Phone", "Address"];
-  var allowedAddress = ["House", "Street", "Address Line 1", "Address Line 2", "City", "Postcode"];
   var newEntry = req.body;
   // Check for mandatory fields (all except address)
   if(!newEntry.hasOwnProperty("Surname") ||
@@ -51,8 +51,61 @@ app.post('/phonebook', function(req, res){
     return;
   })
 
+});
 
+app.put('/phonebook/:id', function(req, res){
+  var id = req.params.id;
+
+  // Check if ID matches one already stored in the phonebook
+  if (!phonebook.hasOwnProperty(id)){
+    res.status(400).send({"Error": "No entry with id "+id+" exists in the phonebook"});
+    return;
+  }
+  var newEntry = req.body;
+
+  for(var property in newEntry){
+    if(newEntry.hasOwnProperty(property)){
+      // Check if the properties being updated are valid things to update
+      if(allowedEntries.indexOf(property) == -1) {
+        res.status(400).send({"Error": "Phonebook entries can only include the following mandatory fields: 'Surname', 'Firstname', 'Phone', and optionally: 'Address'"});
+        return;
+      }
+      // All good! Update the property
+      phonebook[id][property] = newEntry[property];
+      fs.writeFile(phonebookFile, JSON.stringify(phonebook), function(err){
+      if(err) {
+        console.log(err);
+        res.status(500).send({"Error": "Could not update entry in phonebook"});
+        return;
+      }
+      res.status(201).location("http://localhost:3000/phonebook/"+id).send();
+      return;
+    })
+    }
+  }
 })
+
+app.delete('/phonebook/:id', function(req, res){
+  var id = req.params.id;
+
+  // Check if ID matches one already stored in the phonebook
+  if (!phonebook.hasOwnProperty(id)){
+    res.status(400).send({"Error": "No entry with id "+id+" exists in the phonebook"});
+    return;
+  }
+
+  // Get deleting
+  delete phonebook[id];
+  // update phonebook file
+  fs.writeFile(phonebookFile, JSON.stringify(phonebook), function(err){
+      if(err) {
+        console.log(err);
+        res.status(500).send({"Error": "Could not delete entry in phonebook"});
+        return;
+      }
+  });
+  res.sendStatus(204);
+});
 
 
 

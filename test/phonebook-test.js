@@ -49,8 +49,41 @@ describe('Phonebook API', function(){
           })
       });
 
-      it('should remove an existing entry in the phone book.');
-      it('should update an existing entry in the phone book');
+      it('should remove an existing entry in the phone book.', function(done){
+        request(url)
+          .delete('/phonebook/4')
+          .expect(204)
+          .end(function(err){
+            if(err){
+              throw err;
+            }
+            request(url).get('/phonebook').end(function(err, res){
+              if(err){
+                throw err;
+              }
+              res.body.should.not.have.property('4');
+              done();
+            })
+          })
+
+      });
+      it('should update an existing entry in the phone book', function(done){
+        var body = {
+          "Firstname":"Updated"
+        }
+        request(url)
+          .put('/phonebook/3')
+          .send(body)
+          .expect(201)
+          .end(function(err, res){
+            if(err){
+              throw err;
+            }
+            res.header.should.have.properties({"location":"http://localhost:3000/phonebook/3"});
+            done();
+
+          })
+      });
       it('should search for entries in the phone book by surname.');
   });
 
@@ -83,6 +116,37 @@ describe('Phonebook API', function(){
           res.body.should.have.properties({"Error": "New entries can only include the following mandatory fields: 'Surname', 'Firstname', 'Phone', and optionally: 'Address'"});
           done();
         })
+    });
+
+    it("should reject updates to phonebook entries that don't exist", function(done){
+      var body = {"Firstname": "Joe"};
+      request(url)
+        .put('/phonebook/123')
+        .send(body)
+        .expect(400)
+        .end(function(err, res){
+          if(err){
+            throw err;
+          }
+          res.body.should.have.properties({"Error": "No entry with id 123 exists in the phonebook"});
+          done();
+        })
+    });
+
+    it("should reject updates to phonebook entries containing invalid fields", function(done){
+      var body = {"Something": "Else"};
+      request(url)
+        .put('/phonebook/3')
+        .send(body)
+        .expect(400)
+        .end(function(err, res){
+          if(err){
+            throw err;
+          }
+          res.body.should.have.properties({"Error": "Phonebook entries can only include the following mandatory fields: 'Surname', 'Firstname', 'Phone', and optionally: 'Address'"});
+          done();
+        })
+
     })
   })
 });
