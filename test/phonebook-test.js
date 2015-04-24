@@ -5,7 +5,7 @@ var request = require('supertest');
 describe('Phonebook API', function(){
   // Base URL used throughout tests:
   var url = 'http://localhost:3000';
-  
+
   describe('acceptance criteria:', function(){
       it('should list all entries in the phone book', function(done) {
         request(url)
@@ -16,10 +16,10 @@ describe('Phonebook API', function(){
               throw err;
               done();
             }
-            res.body.should.have.properties(["001", "002", "003"]);
-            res.body["001"].should.have.properties({"Surname":"Messa"});
-            res.body["002"].should.have.properties({"Surname":"Lablaw"});
-            res.body["003"].should.have.properties({"Surname":"Bateman"});
+            res.body.should.have.properties(["1", "2", "3"]);
+            res.body["1"].should.have.properties({"Surname":"Messa"});
+            res.body["2"].should.have.properties({"Surname":"Lablaw"});
+            res.body["3"].should.have.properties({"Surname":"Bateman"});
             done();
               
         })
@@ -43,7 +43,7 @@ describe('Phonebook API', function(){
             if(err){
               throw err;
             }
-            res.header.should.have.properties({"Location":"http://localhost:3000/phonebook/004"});
+            res.header.should.have.properties({"location":"http://localhost:3000/phonebook/4"});
             done();
 
           })
@@ -55,7 +55,7 @@ describe('Phonebook API', function(){
   });
 
   describe('error handling', function(){
-    it('should reject badly formatted new entries', function(done){
+    it('should reject new entries without mandatory fields', function(done){
       var body = {"Not": "good"};
       request(url)
         .post('/phonebook')
@@ -65,7 +65,22 @@ describe('Phonebook API', function(){
           if(err){
             throw err;
           }
-          res.body.should.have.properties({"Error": "New entries must include the following mandatory fields: Surname, Firstname, Phone"});
+          res.body.should.have.properties({"Error": "New entries must include the following mandatory fields: 'Surname', 'Firstname', 'Phone'"});
+          done();
+        })
+    });
+
+    it('should reject new entries with fields other than the four accepted fields', function(done){
+      var body = {"Firstname": "Joe", "Surname": "Bloggs", "Phone": "01962123456", "Something":"Else"};
+      request(url)
+        .post('/phonebook')
+        .send(body)
+        .expect(400)
+        .end(function(err, res){
+          if(err){
+            throw err;
+          }
+          res.body.should.have.properties({"Error": "New entries can only include the following mandatory fields: 'Surname', 'Firstname', 'Phone', and optionally: 'Address'"});
           done();
         })
     })
