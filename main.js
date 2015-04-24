@@ -7,13 +7,13 @@ var phonebook = JSON.parse(fs.readFileSync('phonebook.json', 'utf8'));
 var app = express();
 app.use(bodyParser.json());
 
-app.get('/', function(req, res) {
+app.get('/phonebook', function(req, res) {
   res.set('Content-Type', 'application/json');
 	res.send(phonebook);
 });
 
-app.post('/', function(req, res){
-  req.body
+app.post('/phonebook', function(req, res){
+  res.send();
 })
 
 
