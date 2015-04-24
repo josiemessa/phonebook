@@ -11,7 +11,23 @@ var app = express();
 app.use(bodyParser.json());
 
 app.get('/phonebook', function(req, res) {
-	res.send(phonebook);
+  // only go down this path if the "surname" query parameter was used
+  if(req.query && null != req.query.surname) {
+    // Look through phonebook for matching surnames
+    var responseBody = {};
+    for (var entry in phonebook) {
+      if(phonebook.hasOwnProperty(entry.toString())) {
+        if(phonebook[entry.toString()].Surname == req.query.surname) {
+          responseBody[entry.toString()] = phonebook[entry.toString()];
+        }
+      }
+    }
+    res.send(responseBody);
+    return;
+  } else {
+    res.send(phonebook);
+    return;
+  }
 });
 
 app.post('/phonebook', function(req, res){

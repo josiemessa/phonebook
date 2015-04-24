@@ -84,7 +84,22 @@ describe('Phonebook API', function(){
 
           })
       });
-      it('should search for entries in the phone book by surname.');
+      it('should search for entries in the phone book by surname.', function(done){
+        request(url)
+          .get('/phonebook?surname=Messa')
+          .expect(200)
+          .end(function(err, res){
+            if(err){
+              throw err;
+            }
+            res.body.should.have.property("1");
+            res.body.should.not.have.property("2"); // Make sure it's not just using the regular GET functionality
+            res.body["1"].should.have.properties({"Firstname":"Josie"});
+            res.body["1"].should.have.properties({"Surname":"Messa"});
+            done();
+          });
+      });
+
   });
 
   describe('error handling', function(){
@@ -147,6 +162,19 @@ describe('Phonebook API', function(){
           done();
         })
 
+    });
+
+    it("should fail when deleting an entry in the phonebook that does not exist", function(done){
+      request(url)
+        .delete('/phonebook/123')
+        .expect(400)
+        .end(function(err, res){
+          if(err){
+            throw err;
+          }
+          res.body.should.have.properties({"Error": "No entry with id 123 exists in the phonebook"});
+          done();
+        })
     })
   })
 });
