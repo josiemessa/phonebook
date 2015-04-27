@@ -64,11 +64,11 @@ Supply the surname you wish to search for as a query parameter. The response wil
 ## Retrieve a single phonebook entry by ID
 **GET** `/phonebook/{id}`
 
-Ensure the `id` parameter matches an existing phonebook entry. The response will contain the single phonebook entry indexed by the provided ID. This will match the URI supplied in the `location` header in response to a POST or PUT.
+Ensure the `id` parameter matches an existing phonebook entry. The response will contain the single phonebook entry indexed by the provided ID. Requests can be made to the URI supplied in the `location` header in response to a POST or PUT.
 
 # Running the tests
 Ensure the server is started up. In the `phonebook` directory, run:
 ```
 $ mocha
 ```
-There are 12 tests to be run which test acceptance criteria and basic error checking. All should pass
+There are 12 tests to be run which test acceptance criteria and basic error checking.
