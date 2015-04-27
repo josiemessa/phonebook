@@ -180,7 +180,7 @@ describe('Phonebook API', function(){
   });
   after(function() {
     // Write back to phonebook to undo changes made during tests
-    fs.writeFileSync("../phonebook.json", JSON.stringify(phonebook, null, 2));
+    fs.writeFileSync("phonebook.json", JSON.stringify(phonebook, null, 2));
   })
 });
 
