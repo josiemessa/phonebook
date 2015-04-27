@@ -1,6 +1,7 @@
 var should = require('should'); 
 var assert = require('assert');
 var request = require('supertest');
+var fs = require('fs');
 
 describe('Phonebook API', function(){
   // Base URL used throughout tests:
@@ -176,5 +177,47 @@ describe('Phonebook API', function(){
           done();
         })
     })
+  });
+  after(function() {
+    // Write back to phonebook to undo changes made during tests
+    fs.writeFileSync("../phonebook.json", JSON.stringify(phonebook, null, 2));
   })
 });
+
+var phonebook = {
+  "1": 
+  {
+    "Surname": "Messa",
+    "Firstname": "Josie",
+    "Phone": 37245219,
+    "Address": 
+    {
+      "House": "Hursley House",
+      "Street": "Hursley Park",
+      "Address Line 1": "Hursley",
+      "City": "Winchester",
+      "Postcode": "SO21 2JN"
+    }
+  },
+  "2":
+  {
+    "Surname": "Lablaw",
+    "Firstname": "Bob",
+    "Phone": 12345678
+  },
+  "3":
+  {
+    "Surname": "Bateman",
+    "Firstname": "Ralph",
+    "Phone": 27248880,
+    "Address":
+    {
+      "House": "1",
+      "Street": "Idontknow",
+      "Address Line 1": "Whereyou Live",
+      "Address Line 2": "Thatwouldbe Weird",
+      "City": "Townsville",
+      "Postcode": "PO51 6OD"
+    }
+  }
+}

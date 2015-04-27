@@ -61,7 +61,7 @@ app.post('/phonebook', function(req, res){
 
   // Store new entry
   console.log("Storing new entry in phonebook...");
-  fs.writeFile(phonebookFile, JSON.stringify(phonebook), function(err){
+  fs.writeFile(phonebookFile, JSON.stringify(phonebook, null, 2), function(err){
     if(err) {
       console.log("**ERROR** "+err);
       res.status(500).send({"Error": "Could not store new entry in phonebook"});
@@ -94,7 +94,7 @@ app.put('/phonebook/:id', function(req, res){
       // All good! Update the supplied property
       phonebook[id][property] = newEntry[property];
       console.log("Updating phonebook entry "+id+"...");
-      fs.writeFile(phonebookFile, JSON.stringify(phonebook), function(err){
+      fs.writeFile(phonebookFile, JSON.stringify(phonebook, null, 2), function(err){
       if(err) {
         console.log("**ERROR** "+err);
         res.status(500).send({"Error": "Could not update entry in phonebook"});
@@ -121,7 +121,7 @@ app.delete('/phonebook/:id', function(req, res){
   delete phonebook[id];
   // Update phonebook file
   console.log("Deleting phonebook entry "+id+"...");
-  fs.writeFile(phonebookFile, JSON.stringify(phonebook), function(err){
+  fs.writeFile(phonebookFile, JSON.stringify(phonebook, null, 2), function(err){
       if(err) {
         console.log("**ERROR** "+err);
         res.status(500).send({"Error": "Could not delete entry in phonebook"});
