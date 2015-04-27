@@ -9,9 +9,9 @@
 	"dependencies": {
 		"express": "4.12.x",
 		"mocha": "2.2.x",
-		"request": "*",
-		"should": "*",
-    "supertest": "*",
-    "body-parser": "*"
+		"request": "2.55.x",
+		"should": "6.0.x",
+    "supertest": "0.15.x",
+    "body-parser": "1.12.x"
 	}
 }
