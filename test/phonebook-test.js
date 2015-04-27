@@ -178,6 +178,34 @@ describe('Phonebook API', function(){
         })
     })
   });
+
+  describe('extra features', function(){
+    it("should retrieve a single entry in the phonebook by id", function(done){
+      request(url)
+      .get('/phonebook/1')
+      .expect(200)
+      .end(function(err, res){
+        if(err){
+          throw err;
+        }
+        res.body.should.have.properties({"Firstname":"Josie", "Surname":"Messa"});
+        done();
+      })
+    });
+    it("should throw an error when attempting to retrieve a single entry by id that doesn't exist", function(done){
+      request(url)
+      .get('/phonebook/123')
+      .expect(400)
+      .end(function(err,res){
+        if(err){
+          throw err;
+        }
+        res.body.should.have.properties({"Error": "No entry with id 123 exists in the phonebook"});
+        done();
+      })
+    });
+  })
+
   after(function() {
     // Write back to phonebook to undo changes made during tests
     fs.writeFileSync("phonebook.json", JSON.stringify(phonebook, null, 2));

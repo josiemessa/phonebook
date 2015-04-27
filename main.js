@@ -74,6 +74,20 @@ app.post('/phonebook', function(req, res){
 
 });
 
+
+app.get('/phonebook/:id', function(req, res){
+  var id = req.params.id;
+
+  // Check if ID matches one already stored in the phonebook
+  if (!phonebook.hasOwnProperty(id)){
+    res.status(400).send({"Error": "No entry with id "+id+" exists in the phonebook"});
+    return;
+  }
+
+  res.send(phonebook[id]);
+  return;
+});
+
 app.put('/phonebook/:id', function(req, res){
   var id = req.params.id;
 
